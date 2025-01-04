@@ -1,0 +1,290 @@
+%Experiment: Static-EDTA
+%Enrique Maya
+%Started February, 2019
+%/home/enrique/Documents/Final Coat/Final Coat/2016/LAB/Static-Zn-EDTA
+
+\documentclass[10pt, fleqn]{article}    %%fleqn to ident an equation
+%\usepackage[utf8]{inputenc}
+\usepackage[letterpaper]{geometry}
+%\usepackage{palatino, url}
+\usepackage{graphicx}
+\usepackage{subfig}
+%\u\textsc{}sepackage{caption}
+%\usepackage{subcaption}
+\usepackage{float}             %use to place a graph at precisely location
+\usepackage[version=4]{mhchem} %inset a chemical formula
+\graphicspath{{images/}}
+\usepackage{cite}   %Edition to Reference
+%\usepackage{natbib}
+%\usepackage{draftwatermark}  %watermark
+%\SetWatermarkText{Draft}     %watermark
+\newcommand{\V}{V (Ag/AgCl)} %abbreviated text
+%\usepackage{biblatex}      %Impport the package to cite
+\usepackage[bottom]{footmisc}   %fixed footnote to the bottom of page
+%\newcommand*\cec[1]{\cesplit{{\,\ }{\0}}{#1}}  %splits at commas on chemical compouds
+\usepackage{mathtools}
+\usepackage{longtable}   %lontable available
+\usepackage{capt-of} %caption to use for a lon table-figure 
+\usepackage{makecell}  %formating of certain cells
+
+%\usepackage{footnotebackref}
+%\usepackage{tablefootnote}
+
+%%Greek letters
+%\usepackage[cm-default]{fontspec}
+%\setmainfont{Linux Libertine O}% need a font that has the glyphs!
+%\usepackage{chemgreek}
+%\selectchemgreekmapping{fontspec}
+\usepackage{wasysym} % WASY2 symbols
+\usepackage{textcomp} %insert greek letter
+\setlength{\footskip}{105pt} %The length dictating the distance between the text block and your page number
+%List of reactions
+%\usepackage{amsmath}   %indent an equation
+%%\setlength{\mathindent}{0cm}
+
+\newenvironment{reaction}{\begin{equation}}{\end{equation}}
+\newenvironment{reaction*}{\begin{equation*}}{\end{equation*}}
+\usepackage{cleveref}  %package to reference multiple labels in one command
+%\usepackage[backend=bibtex]{biblatex}
+\setcounter{section}{0}  % controls section numbering
+
+\usepackage{breqn}  % break long equations
+
+%On Textstudio configuration replace pdflatex by xelatex in order to use PStricks package
+%\pdfminorversion=4              % tell pdflatex to generate PDF in version 1.4
+
+% % % Paragraph format
+%\usepackage{setspace}
+\usepackage[nodisplayskipstretch]{setspace}
+\usepackage{etoolbox}	
+%\doublespacing
+\singlespacing
+%\onehalfspacing
+\usepackage{amsmath}   %indent an equation
+\setlength{\mathindent}{0cm}
+
+%\BeforeBeginEnvironment{equation}{\begin{singlespace}}
+%\AfterEndEnvironment{equation}{\end{singlespace}\noindent\ignorespaces}
+
+
+%\usepackage{indentfirst}
+%\setlength{\parindent}{5cm}
+
+\usepackage{enumitem}  %%% item separation on a list
+\setlist{noitemsep}
+
+
+
+\usepackage{parskip}
+\parskip=2.\baselineskip \advance\parskip by 0pt plus 0pt
+
+%%% Footnote in tabular environment
+\usepackage[flushleft]{threeparttable}
+
+
+
+%%% Table formating page 160 LATEX Cookbook
+\usepackage[table]{xcolor}
+\rowcolors{2}{gray!15}{white}
+\newcommand{\head}[1]{%
+	\textcolor{white}{\textbf{#1}}}
+\renewcommand{\arraystretch}{1.5}
+
+
+%%% enumarate formating
+\usepackage{enumitem}
+
+
+%Drawing electrical circuits PSTrick book - we shoul use xelatex instead of pdflatex
+\usepackage{pstricks, pst-circ}
+
+% Drawing electrical circuits book latex Cookbook, page 334
+\usepackage{tikz}
+\usetikzlibrary{circuits.ee.IEC}
+
+
+
+%%% Importing data from files
+\usepackage{dcolumn, booktabs, ragged2e}
+\usepackage{datatool}
+\usepackage{tabularx}
+\usepackage{siunitx} %%display SI units and formatting decimal numbers
+\usepackage{rotating}  %%to use sidewaystable
+\usepackage{units}
+\usepackage{array, booktabs}  %%table page 184 Typesetting tables with LaTex
+\newcolumntype{C}{>{\small}c} %%table page 184 Typesetting tables with LaTex
+%\usepackage{graphicx}
+%\usepackage{adjustbox}
+%\DTLloaddb{Iss}{Is.csv}
+%\DTLloaddb[]{43EISfwfit}{43EISfwfit.csv}
+%\DTLsort[Sample]{CurrentDensity=descending}{Iss}
+%%\DTLsort{Hits"=descending}{Linux}
+
+\usepackage{currfile}  %% file name
+
+\title{Processing Images to improve Analyze Particles Function in ImageJ}
+\author{Enrique Maya}
+\date{\today}
+
+
+\begin{document}
+	\maketitle
+	\footnote{The current file is: \currfilename.} %put the current file name generically into a document
+	\footnote{/home/enrique/Documents/Final Coat/2021/Testing-Modules/Examples/Processing Images/}
+	
+	Objective: Develop a methodology to process scribed painted metallic samples to quantify corrosion after a salt fog testing using \textit{ImageJ}.
+	
+	
+	\section*{Introduction}
+	
+		ImageJ\footnote{https://imagej.nih.gov/ij/index.html} is open-source software that can edit, analyze, process, save and print 8-bit, 16-bit and 32-bit images. It can calculate area, measure distances, and standard image processing function like particle analysis. We focus on this last as part of our methodology. The idea behind this is to find a procedure to analyze images with reproducible results. 
+		
+		In a previous document, \textit{Use of ImageJ software to quantify corrosion products on scribed panels}, we presented a methodology to analyze images with reproducible results. This methodology achieved its purpose of being user independent. However, we found the images might have some source of error like water drops near the scribe, shadows, some particles that might have some effect when use \textit{color threshold} function. Consequently, this document presents a comparison of some images editing processes before applying \textit{Analyze Particles} function.  However, we found the picture format have an impact in imaging processing, for instance \textit{JPEG} (lossy compression format) is not recommended. On the other hand, \textit{TIFF} or \textit{PNG} are not-lossy formats that are recommended. \textit{TIFF} preserves any calibration applied to your images contrary to \textit{PNG}. Once an image has been saved as compressed \textit{JPEG} there is no way of reverting to the original\footnote{https://imagej.net/imaging/principles}. \Cref{fig:Mandril} shows graphically the loss of information after saving the original color image as \textit{JPEG}. 
+		
+			\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.2\textwidth]{mandrill-orig}
+			 \includegraphics[width=0.2\textwidth]{mandrill-hue-png}
+			 \includegraphics[width=0.2\textwidth]{mandrill-hue-jpg}
+			\caption{From left to right, you see the original (with an 8-bit colormap), the hue channel of the original, and the hue channel after saving as a JPEG with ImageJ’s default options – note in particular the vertical and horizontal artifacts.}
+			\label{fig:Mandril}
+		\end{figure}
+		
+		This loss of information would have a negative impact on the quantification of corrosion in our samples, especially when comparing \textit{Test} and \textit{Control} samples. 
+		
+		Recently, we acquired a photo studio professional shooting tent. This tent will evenly distributes the light source on the panels to avoid any shadow formation. Then, we will compare the imaging processing results by using a \textit{TIFF} and a \textit{JPEG} formats. 
+				
+		
+	\section*{Methodology}	
+	
+		First, we used the following image of a painted panel sample to determine if our methodology for measuring corrosion is affected by imaging processing before using \textit{Particle Analysis} function, see \Cref{fig:HighQuality}. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.5\textwidth]{Test-HighLight} 
+		\caption{Sample after salt fog experiment. High light illumination.}
+		\label{fig:HighQuality}
+	\end{figure}
+
+
+	Now, the first step in the imaging processing is to crop the image by using the macro \textit{Crop1}. Then, we used the following function inside \textit{Image} menu, \textit{Color Balance} (use \textit{Image} > \textit{Adjust} > \textit{Color Balance}...), \textit{Brightness/Contrast} (use \textit{Image} > \textit{Adjust} > \textit{Brightness/Contrast}...) and finally \textit{Color Balance}, \textit{Brightness/Contrast} (one at at time starting with \textit{Brightness/Contrast}) together.  After accessing any of the menus a windows will appear, see \Cref{fig:Colormenu}. We use \textit{Auto} for the purpose of this work.  
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.15\textwidth]{Colormenu} 
+		\includegraphics[width=0.15\textwidth]{Brightness-Contrastmenu} 
+		\caption{Color Menu.}
+		\label{fig:Colormenu}
+	\end{figure}
+	
+	
+	
+	
+	
+	\section*{Results}
+	
+	\Cref{fig:Cropped,fig:Cropped-brightness,fig:Cropped-color,fig:Cropped-brightness-color} show the cropped image and the adjusted cropped images (\textit{TIFF} format). A visual inspection identified that by using \textit{Color Balance} and/or \textit{Brightness/Contrast} modified significantly the original image.  \Cref{tab:ImageProcessing}. However, using \textit{Analysis Particles} function give us a quantitative method to compared this changes. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{Test-HighLight-Gwenview-c-a} 
+		\caption{Original cropped image after running macro Crop1.}
+		\label{fig:Cropped}
+	\end{figure}
+	
+	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{Test-HighLight-Gwenview-brightness-c-a} 
+		\caption{Cropped image \textit{Brightness/Contrast} adjusted.}
+		\label{fig:Cropped-brightness}
+	\end{figure}
+	
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{Test-HighLight-Gwenview-color-c-a} 
+		\caption{Cropped image \textit{Color Balance} adjusted.}
+		\label{fig:Cropped-color}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{Test-HighLight-Gwenview-color-brightness-c-a} 
+		\caption{Cropped image\textit{Brightness/Contrast} and \textit{Color Balance} adjusted.}
+		\label{fig:Cropped-brightness-color}
+	\end{figure}
+
+
+
+ As we mentioned before, we need a reproducible methodology independent of the user. However, in \Cref{tab:ImageProcessing} we use the original manual corrosion analysis for comparison. 
+
+
+\begin{table}[H]
+	\centering
+	\small
+	\caption{Image processing results by applying \textit{Analyze Particles} function, \textit{TIFF} format.}
+	\begin{tabular}{|l|r|r|}
+		\hline
+		Image Process & \multicolumn{1}{l|}{Total area} & \multicolumn{1}{l|}{Corrosion area} \\ \hline
+		Manual Analysis (original image)$^a$ & 17.99 & 8.04 \\ \hline
+		Original image & 18.01 & 7.95 \\ \hline
+		Color Balance adjusted & 17.21 & 7.97 \\ \hline
+		Brightness/Contrast adjusted & 18.10 & 10.84 \\ \hline
+		Brightness/Contrast-Color Balance adjusted & 18.17 & 8.36 \\ \hline
+	\end{tabular} \\
+	\begin{flushright}
+		\footnotesize{$^a$ We used manual corrosion analysis (polygon selection and measure manually every corrosion spot)}
+	\end{flushright}
+	\label{tab:ImageProcessing}
+\end{table}
+
+
+The total area of the scribe is about 18.00 units and the corrosion area approximately to 8.00 units. Furthermore, we observed \textit{Color/Balance} adjustment obtained the lowest measured estimate. Consequently, \textit{Brightness/Contrast} resulted in the largest corrosion area estimation, but the lowest in total area. However, we we used \textit{JPEG} format we observed the total area is estimated about 16.0 units and the corrosion area about 7.00 units, see \Cref{tab:ImageProcessingJPeg}. Hence, we observed the picture format might affect the corrosion estimation.  We noticed that as before \textit{Color/Balance} adjustment obtained the lowest measured estimate and \textit{Original image} resulted in the largest corrosion area estimation. Nonetheless, \textit{Brightness/Contrast-Color Balance} was more consistent with the \textit{Manaul Analysis}.
+
+
+\begin{table}[H]
+	\centering
+	\small
+	\caption{Image processing results by applying \textit{Analyze Particles} function, \textit{JPEG} format.}
+\begin{tabular}{|l|r|r|}
+		\hline
+%		Image Process & \multicolumn{1}{l}{Total area} & \multicolumn{1}{l |}{Corrosion area} \\ \hline
+		Image Process & \multicolumn{1}{l|}{Total area$^b$} & \multicolumn{1}{l|}{Corrosion area$^b$} \\ \hline
+		Manual Analysis (original image)$^a$ & 16.64 & 7.48 \\ \hline
+		Original image & 13.46 & 7.90 \\ \hline
+		Color Balance adjusted  & 15.08 & 7.40 \\ \hline
+		Brightness/Contrast adjusted & 15.94 & 7.73 \\ \hline
+		Brightness/Contrast-Color Balance adjusted & 16.34 & 7.68 \\ \hline
+	\end{tabular} \\
+	\begin{flushleft}
+		\footnotesize{$^a$ We used manual corrosion analysis (polygon selection and measure manually every corrosion spot)}\\
+	\footnotesize{$^b$ Normalized, divided by $10^4$}
+	\end{flushleft}
+
+	\label{tab:ImageProcessingJPeg}
+\end{table}
+
+
+
+
+
+
+
+These above results are non conclusive in choosing the most reliable image processing method, but it would be good practice to use the \textit{TIFF} format as the image and the image setting of \textit{Brightness/Contrast-Color Balance} together as a methodology to compensate for both \textit{Color Balance } and \textit{Brightness/Contrast} adjustment methods.
+
+
+
+\section*{Summary}
+	
+	
+	This document presented a comparison of image processing adjustments prior to \textit{Analyze Particles} function to estimate corrosion inside a scribe for samples tested in salt fog chambers. The results are consistent with a previous \textit{Manual} methodology. 
+	
+	Using a professional photo studio shooting tent improves the quality of our image. This is beneficial for \textit{Color Threshold} function, because the homogeneous light distribution prevents shadows. In addition to this, we found that the \textit{Brightness/Contrast-Color Balance} adjustment setting is beneficial to quantify the corrosion within the scribe as well as \textit{TIFF} image format. 
+	
+	
+	
+	 
+
+\end{document}
